@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { User, Mail, Phone } from 'lucide-react';
-import Input from '../ui/Input';
-import Button from '../ui/Button';
-import useUserStore from '../../stores/userStore';
-import useAssistantStore from '../../stores/assistantStore';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { User, Mail, Phone } from "lucide-react";
+import Input from "../ui/Input";
+import Button from "../ui/Button";
+import useUserStore from "../../stores/userStore";
+import useAssistantStore from "../../stores/assistantStore";
 
 interface UserFormProps {
   onStartCall: () => void;
@@ -13,68 +13,68 @@ interface UserFormProps {
 const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
   const { setUser } = useUserStore();
   const { startVoiceAssistant, isLoading } = useAssistantStore();
-  
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
   });
-  
+
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     let isValid = true;
-    
+
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = "First name is required";
       isValid = false;
     }
-    
+
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = "Last name is required";
       isValid = false;
     }
-    
+
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
       isValid = false;
     }
-    
+
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = "Phone number is required";
       isValid = false;
     }
-    
+
     setErrors(newErrors);
     return isValid;
   };
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Clear error when user types
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     try {
       setUser(formData);
       await startVoiceAssistant(
@@ -85,10 +85,10 @@ const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
       );
       onStartCall();
     } catch (error) {
-      console.error('Error starting call:', error);
+      console.error("Error starting call:", error);
     }
   };
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -103,7 +103,7 @@ const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
           Please provide your details to start the voice assistant
         </p>
       </div>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
           <Input
@@ -116,7 +116,7 @@ const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
             icon={<User size={16} />}
             required
           />
-          
+
           <Input
             name="lastName"
             label="Last Name"
@@ -125,10 +125,11 @@ const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
             onChange={handleChange}
             error={errors.lastName}
             icon={<User size={16} />}
+            fullWidth
             required
           />
         </div>
-        
+
         <Input
           name="email"
           type="email"
@@ -141,7 +142,7 @@ const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
           fullWidth
           required
         />
-        
+
         <Input
           name="phone"
           type="tel"
@@ -154,7 +155,7 @@ const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
           fullWidth
           required
         />
-        
+
         <div className="mt-6">
           <Button
             type="submit"
@@ -163,7 +164,7 @@ const UserForm: React.FC<UserFormProps> = ({ onStartCall }) => {
             fullWidth
             disabled={isLoading}
           >
-            {isLoading ? 'Starting...' : 'Start Voice Assistant'}
+            {isLoading ? "Starting..." : "Start Voice Assistant"}
           </Button>
         </div>
       </form>
