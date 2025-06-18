@@ -6,3 +6,11 @@ All tasks are stored in a centralized database and handled by a FastAPI backend.
 
 The frontend features a clean, responsive interface with integrated voice control, live at:
 🔗 https://ai-todo-v3.vercel.app/
+
+---
+
+PurePudding
+
+awusetin@gmail.com
+
+17 - 03 - 25
